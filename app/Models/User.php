@@ -42,4 +42,25 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    
+    public function createdCustomers()
+    {
+        return $this->hasMany(Customer::class, 'created_by');
+    }
+
+    public function assignedCustomers()
+    {
+        return $this->hasMany(Customer::class, 'assigned_to');
+    }
+
+    public function actions()
+    {
+        return $this->hasMany(Action::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 }
