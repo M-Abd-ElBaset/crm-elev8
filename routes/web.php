@@ -4,6 +4,8 @@ use App\Http\Controllers\ActionController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Models\Action;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,15 +23,27 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     // Admin-only routes
     Route::middleware(['can:isAdmin'])->group(function () {
         Route::resource('users', UserController::class);
     });
+
+    Route::get('/dashboard', function () {
+        $customerCount = Customer::count();
+        $actionCount = Action::count();
+        $recentActions = Action::with(['customer', 'user'])
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+        $recentCustomers = Customer::with(['creator', 'assignedEmployee'])
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+    
+        return view('dashboard', compact('customerCount', 'actionCount', 'recentActions', 'recentCustomers'));
+    })->middleware(['verified'])->name('dashboard');
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
