@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\ActionController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,19 +18,23 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('welcome');
 });
 
-Auth::routes();
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-// Admin and employee routes
-Route::middleware(['auth'])->group(function () {
-    // User/Employee management (admin only)
-    Route::resource('users', UserController::class);
+Route::middleware('auth')->group(function () {
+    // Admin-only routes
+    Route::middleware(['can:isAdmin'])->group(function () {
+        Route::resource('users', UserController::class);
+    });
     
-    // Customer management
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::resource('customers', CustomerController::class);
     Route::post('customers/{customer}/assign', [CustomerController::class, 'assign'])->name('customers.assign');
     
@@ -38,6 +42,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('customers.actions', ActionController::class)->shallow();
     Route::post('customers/{customer}/actions/{action}/result', [ActionController::class, 'addResult'])->name('customers.actions.result');
 });
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+require __DIR__.'/auth.php';
