@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::post('customers/{customer}/assign', [CustomerController::class, 'assign'])->name('customers.assign');
     
     // Customer actions
-    Route::resource('customers.actions', ActionController::class)->except(['index'])->shallow();
+    Route::resource('customers.actions', ActionController::class);
     Route::post('customers/{customer}/actions/{action}/result', [ActionController::class, 'addResult'])->name('customers.actions.add-result');
 });
 
