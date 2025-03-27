@@ -53,8 +53,8 @@ Route::middleware('auth')->group(function () {
     Route::post('customers/{customer}/assign', [CustomerController::class, 'assign'])->name('customers.assign');
     
     // Customer actions
-    Route::resource('customers.actions', ActionController::class)->shallow();
-    Route::post('customers/{customer}/actions/{action}/result', [ActionController::class, 'addResult'])->name('customers.actions.result');
+    Route::resource('customers.actions', ActionController::class)->except(['index'])->shallow();
+    Route::post('customers/{customer}/actions/{action}/result', [ActionController::class, 'addResult'])->name('customers.actions.add-result');
 });
 
 require __DIR__.'/auth.php';

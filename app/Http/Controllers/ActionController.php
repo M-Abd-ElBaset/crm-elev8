@@ -40,7 +40,7 @@ class ActionController extends Controller
         $action->user_id = Auth::id();
         $action->save();
 
-        return redirect()->route('customers.actions.index', $customer)->with('success', 'Action created successfully');
+        return redirect()->route('customers.show', $customer)->with('success', 'Action created successfully');
     }
 
     public function show(Customer $customer, Action $action)
@@ -63,14 +63,14 @@ class ActionController extends Controller
         
         $action->update($validated);
 
-        return redirect()->route('customers.actions.index', $customer)->with('success', 'Action updated successfully');
+        return redirect()->route('customers.show', $customer)->with('success', 'Action updated successfully');
     }
 
     public function destroy(Customer $customer, Action $action)
     {
         $this->authorize('delete', $action);
         $action->delete();
-        return redirect()->route('customers.actions.index', $customer)->with('success', 'Action deleted successfully');
+        return redirect()->route('customers.show', $customer)->with('success', 'Action deleted successfully');
     }
 
     public function addResult(Request $request, Customer $customer, Action $action)
@@ -85,6 +85,6 @@ class ActionController extends Controller
             'result' => $validated['result']
         ]);
         
-        return redirect()->route('customers.actions.show', [$customer, $action])->with('success', 'Result added successfully');
+        return redirect()->route('actions.show', $action)->with('success', 'Result added successfully');
     }
 }
