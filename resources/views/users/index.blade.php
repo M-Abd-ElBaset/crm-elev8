@@ -37,12 +37,16 @@
                                                 <td>{{ ucfirst($user->role) }}</td>
                                                 <td>{{ $user->assignedCustomers()->count() }}</td>
                                                 <td>
-                                                    <div class="btn-group" role="group">
+                                                    <div class="btn-group gap-2" role="group">
                                                         <a href="{{ route('users.show', $user) }}" 
-                                                           class="btn btn-sm btn-info">View</a>
+                                                           class="btn btn-sm btn-info">
+                                                           <i class="bi bi-eye"></i>
+                                                        </a>
                                                         @if(Auth::user()->isAdmin())
                                                             <a href="{{ route('users.edit', $user) }}" 
-                                                               class="btn btn-sm btn-warning">Edit</a>
+                                                               class="btn btn-sm btn-warning">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </a>
                                                             <form action="{{ route('users.destroy', $user) }}" 
                                                                   method="POST" class="d-inline">
                                                                 @csrf
@@ -50,7 +54,7 @@
                                                                 <button type="submit" 
                                                                         class="btn btn-sm btn-danger" 
                                                                         onclick="return confirm('Are you sure?')">
-                                                                    Delete
+                                                                        <i class="bi bi-trash"></i>
                                                                 </button>
                                                             </form>
                                                         @endif

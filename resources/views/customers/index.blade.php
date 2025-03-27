@@ -35,17 +35,23 @@
                                                 <td>{{ $customer->phone }}</td>
                                                 <td>{{ $customer->assignedEmployee?->name ?? 'Unassigned' }}</td>
                                                 <td>
-                                                    <div class="btn-group" role="group">
+                                                    <div class="btn-group gap-2" role="group">
                                                         <a href="{{ route('customers.show', $customer) }}"
-                                                            class="btn btn-sm btn-info">View</a>
+                                                            class="btn btn-sm btn-info">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
                                                         <a href="{{ route('customers.edit', $customer) }}"
-                                                            class="btn btn-sm btn-warning">Edit</a>
+                                                            class="btn btn-sm btn-warning">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
                                                         <form action="{{ route('customers.destroy', $customer) }}"
                                                             method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-sm btn-danger"
-                                                                onclick="return confirm('Are you sure?')">Delete</button>
+                                                                onclick="return confirm('Are you sure?')">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
                                                         </form>
                                                     </div>
                                                 </td>
